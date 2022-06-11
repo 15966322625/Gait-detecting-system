@@ -1,0 +1,29 @@
+<RCC>
+    <qresource prefix="/Qss">
+        <file>Qss/My_Qss.qss</file>
+    </qresource>
+    <qresource prefix="/icon">
+        <file>image/11.jpg</file>
+        <file>image/downhill.png</file>
+        <file>image/downstairs.png</file>
+        <file>image/jump.png</file>
+        <file>image/kong.jpg</file>
+        <file>image/luodi.jpg</file>
+        <file>image/ping.jpg</file>
+        <file>image/qi.jpg</file>
+        <file>image/red.PNG</file>
+        <file>image/timg.jpg</file>
+        <file>image/uphill.png</file>
+        <file>image/upstairs.png</file>
+        <file>image/walk.png</file>
+        <file>image/walk1.png</file>
+        <file>image/walk2.png</file>
+        <file>image/walk3.png</file>
+        <file>image/walk4.png</file>
+        <file>image/walk5.png</file>
+        <file>image/white.PNG</file>
+        <file>image/yubei.jpg</file>
+        <file>image/zhan.jpg</file>
+        <file>image/走路.jpg</file>
+    </qresource>
+</RCC>
