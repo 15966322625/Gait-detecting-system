@@ -1,5 +1,5 @@
 # Gait detecting system
-基于Cpp11实现的步态检测人机交互系统设计
+基于Cpp11实现的步态检测人机交互系统设计，意在为一套可穿戴式的外骨骼设备控制提供步态检测识别结果的控制指令，实现外骨骼设备助力、辅助行走等现实应用。
 ## 整体框架
 - 整个项目的实现分为上位机Gra3_0和下位机EMG两部分。
 - 上位机主要实现界面设计方面的工作，实现和实验人员的交互作用，效果展示等作用。
@@ -7,17 +7,21 @@
 - 界面主要是在Qt环境下基于C++多线程高并发等功能实现的人机交互系统。
 
 ## 主要实现技术
-- 函数的作用是什么
-- 利用Epoll与线程池实现Reactor高并发模型
-- 利用状态机与正则实现HTTP请求报文解析，可同时处理GET与POST请求
+- Linux下常见操作、cmake文件编写等。
+- Qt关于信号和槽的设计。
+- 数据检测算法的实现。
+- 数据滤波算法的实现。
+- 自定义实现多个类的功能。
+- 实现BP网络模型的算法移植。
+- 局域网下实现客户端和服务端连接。
+- 实现日志系统的设计，监视程序及设备运行状态，记录出现的问题。
 - 用vector容器实现了一个可自动扩容的缓冲区
-- 基于epoll_wait实现定时功能，关闭超时的非活动连接，并用小根堆作为容器管理定时器
 - 利用单例模式实现了一个简单的线程池，减少了线程创建与销毁的开销
-- 利用单例模式实现连接MySQL的数据库连接池，减少数据库连接建立与关闭的开销，实现了用户注册登录功能
-- 利用单例模式与阻塞队列实现异步日志系统，记录服务器运行状态
+
 ## 环境要求
-- Linux
+- Linux-RaspBerry Pi
 - C++11
+- 设备及软件要求：树莓派 AD控制板 计算机 Qt编程软件 Xshell Xftp
 
 ## 整体程序框架
 ### 上位机(upptercomputer)整体代码目录树
@@ -81,36 +85,3 @@
 ├── README.md
 └── resources        静态资源
 ```
-## 项目启动
-需要先配置好数据库
-```
-//创建数据库
-create database webdb;
-//创建user表
-USE yourdb;
-CREATE TABLE user(
-    username char(50) NULL,
-    passwd char(50) NULL
-)ENGINE=InnoDB;
-//添加数据
-INSERT INTO user(username, passwd) VALUES('your name', 'your password');
-
-//webdb是数据库名，user是表名，需要在main函数中传入
-```
-然后编译运行
-```
-make
-./bin/simpleserver
-```
-浏览器访问
-```
-127.0.0.1:9006
-#9006是在main函数中传入的服务器监听端口
-```
-## TODO
-- config配置
-
-## 致谢
-Linux高性能服务器编程，游双著
-
-[markparticle/WebServer](https://github.com/markparticle/WebServer)
