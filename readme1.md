@@ -27,16 +27,20 @@
 ├── build
 │   └── Makefile
 ├── code             源代码
-│   ├── buffer       自动扩容的缓冲区
+│   ├── ActiveSection       激活动作部分
 │   ├── config       配置文件
-│   ├── http         HTTP请求解析、响应
-│   ├── lock         锁函数封装
-│   ├── log          基于阻塞队列的异步日志模块
+│   ├── Dataset     数据集制作部分
+│   ├── filterdata       数据滤波部分
+│   ├── FootDetect        足底压力检测模块
 │   ├── main.cpp     主函数
-│   ├── server       基于epoll的服务器
-│   ├── sqlconnpool  数据库连接池
-│   ├── threadpool   线程池
-│   └── timer        小根堆管理的定时器
+│   ├── IMUPitchDetect      IMU姿态传感器检测模块
+│   ├── JumpFootDetect  跳跃动作检测阶段
+│   ├── mainwindow   Qt界面设计
+│   ├── MyDataStruct  制作自己的数据集阶段
+│   ├── mypushbutton  Qt里的按钮和槽
+│   ├── MyThread  线程
+│   ├── Mytool  工具
+│   └── tcpclient       上位机充当和下位机建立连接的上位机
 ├── log              日志目录
 ├── Makefile
 ├── README.md
