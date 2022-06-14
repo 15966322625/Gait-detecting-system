@@ -13,14 +13,14 @@ MyThreadFilter::MyThreadFilter(QObject *parent): QThread(parent)
     filenum = 1;
 }
 MyThreadFilter::~MyThreadFilter(){}
-void MyThreadFilter::run(){
+void MyThreadFilter::run(){   //三部分数据的采集路径
     QString pathEMG = QString("C:/Users/15492/Desktop/walk/yuya/walk_up_down/%1/file_ADC.csv").arg(filenum);
     QString pathIMU = QString("C:/Users/15492/Desktop/walk/yuya/walk_up_down/%1/file_IMU.csv").arg(filenum);
     QString pathFOOT = QString("C:/Users/15492/Desktop/walk/yuya/walk_up_down/%1/file_FOOT.csv").arg(filenum);
-    FilterData data(pathEMG,pathIMU,pathFOOT);
-    int res1 = data.FilterEMGData();
-    int res2 = data.FilterIMUData();
-    int res3 = data.FilterFOOTData(50);
+    FilterData data(pathEMG,pathIMU,pathFOOT);//对采集到的三部分数据进行数据集制作
+    int res1 = data.FilterEMGData();//返回EMG数据的滤波结果
+    int res2 = data.FilterIMUData();//返回IMU数据的滤波结果
+    int res3 = data.FilterFOOTData(50);//返回FOOT数据的滤波结果
     if(res1<0){
         emit fileERROR("EMG filter error");
         return;
@@ -35,6 +35,7 @@ void MyThreadFilter::run(){
     }
     emit isDone();
 }
+
 void MyThreadFilter::setfile(int n){
     filenum = n;
 }
@@ -49,7 +50,7 @@ void MyThreadLabel::SetAction(int n){
     action.push_back(n);
 }
 MyThreadLabel::~MyThreadLabel(){}
-void MyThreadLabel::run(){
+void MyThreadLabel::run(){   //run函数 重写线程函数
     foot.FindAirFootPoint(1,foot.ch1);
     foot.FindAirFootPoint(2,foot.ch2);
     foot.FindHeelToe();
@@ -58,7 +59,8 @@ void MyThreadLabel::run(){
     emit isDone();
 }
 
-//=============================================================
+//========================上楼梯阶段线程的具体实现=====================================
+
 MyThreadLabelUpstairs::MyThreadLabelUpstairs(QObject *parent): QThread(parent)
 {
     action.push_back(2);
@@ -76,7 +78,7 @@ void MyThreadLabelUpstairs::run(){
     emit isDone();
 }
 
-//=============================================================
+//=====================下楼梯线程的具体实现========================================
 MyThreadLabelDownstairs::MyThreadLabelDownstairs(QObject *parent): QThread(parent)
 {
     action.push_back(1);
@@ -94,7 +96,7 @@ void MyThreadLabelDownstairs::run(){
     emit isDone();
 }
 
-//=============================================================
+//========================所有线程的同时实现=====================================
 MyThreadALL::MyThreadALL(QObject *parent): QThread(parent)
 {
     action.push_back(1);
@@ -119,7 +121,7 @@ void MyThreadALL::run(){
     allfilenums.push_back(guoxiangfilenums);
     allfilenums.push_back(zhangliangfilenums);
     allfilenums.push_back(bofilenums);
-    QString peoples[5] = {"yu","lan","guo","zhang","bo"};
+    QString peoples[5] = {"yu","lan","guo","zhang","bo"};//五个实验人员的数据集采集
     //只更改保存的
     for(int peo=4;peo<5;++peo){
         for(int i:allfilenums[peo]){

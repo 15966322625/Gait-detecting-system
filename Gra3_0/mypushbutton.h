@@ -1,6 +1,5 @@
 #ifndef MYPUSHBUTTON_H
 #define MYPUSHBUTTON_H
-
 #include <QWidget>
 #include <QPushButton>
 
@@ -13,8 +12,8 @@ public:
     QString action;
     QPixmap pix_normal;
     QPixmap pix_action;
-    void set_normal();
-    void set_action();
+    void set_normal();//按钮恢复时的状态
+    void set_action();//按钮动作时的状态
 
 };
 

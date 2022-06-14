@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->setWindowTitle("人体下肢行为识别系统");
+    this->setWindowTitle("人体下肢行为识别系统");//设置界面标题
     this->threadFilter = new MyThreadFilter(this);
     this->threadLabel = new MyThreadLabel(this);
     this->threadDownstairs = new MyThreadLabelDownstairs(this);
@@ -32,22 +32,25 @@ MainWindow::MainWindow(QWidget *parent)
     //==============平地行走 上下楼梯===========================
     connect(ui->LabelButton,&QPushButton::clicked,this,&MainWindow::ll);
     connect(threadAll,&MyThreadALL::isDone,this,&MainWindow::deal);
+
     //=============跳跃=============================
     connect(this,&MainWindow::walkupdownOver,this,&MainWindow::labelJump);
     connect(threadjump,&MyThreadJump::isDone,this,&MainWindow::showJump);
     connect(threadjump,&MyThreadJump::fileERROR,this,&MainWindow::FileError);
+
     //===================上坡==============================
     connect(this,&MainWindow::jumpOver,this,&MainWindow::labelUphill);
     connect(threadUpHill,&MyThreadLabelUpHill::isDone,this,&MainWindow::showhill);
     connect(threadUpHill,&MyThreadLabelUpHill::fileERROR,this,&MainWindow::FileError);
 
-    connect(ui->model,&QPushButton::clicked,this,&MainWindow::callPython);
+    connect(ui->model,&QPushButton::clicked,this,&MainWindow::callPython);//调用py库
 
     ansfile = new QFile;
     ansfile->setFileName("./ansfile.csv");
     ansfile->open(QIODevice::WriteOnly);
     filein.setDevice(ansfile);
     //==================TCP连接========================================
+    //几个信号和槽的连接
     this->client_socket = new TcpClient;
     connect(ui->ConnectButton,&QPushButton::clicked,this,&MainWindow::TcpConnect);
     connect(ui->DisconnectButton,&QPushButton::clicked,this,&MainWindow::TcpDisconnect);
@@ -60,59 +63,65 @@ MainWindow::MainWindow(QWidget *parent)
     ui->TimelineEdit->setText(QString("%1 ms").arg(40.135));
     ui->TCPlineEdit->setText("成功连接到下位机系统");
 
+    //所有的状态划分为6个大的阶段
+    //每个阶段又划分为五个状态
     // walk ups dos uph dhi jum
+    //行走阶段 有五个状态
     walkbuttons[0] = ui->pushButton_2;
     walkbuttons[1] = ui->pushButton_3;
     walkbuttons[2] = ui->pushButton_4;
     walkbuttons[3] = ui->pushButton_5;
     walkbuttons[4] = ui->pushButton_6;
 
-
+    //上楼梯阶段 有五个状态
     upstairsbuttons[0] = ui->pushButton_7;
     upstairsbuttons[1] = ui->pushButton_8;
     upstairsbuttons[2] = ui->pushButton_9;
     upstairsbuttons[3] = ui->pushButton_10;
     upstairsbuttons[4] = ui->pushButton_11;
 
+    //下楼梯阶段 有五个状态
     downstairsbuttons[0] = ui->pushButton_12;
     downstairsbuttons[1] = ui->pushButton_13;
     downstairsbuttons[2] = ui->pushButton_14;
     downstairsbuttons[3] = ui->pushButton_15;
     downstairsbuttons[4] = ui->pushButton_16;
 
+    //上坡阶段  有五个状态
     uphillbuttons[0] = ui->pushButton_17;
     uphillbuttons[1] = ui->pushButton_18;
     uphillbuttons[2] = ui->pushButton_19;
     uphillbuttons[3] = ui->pushButton_20;
     uphillbuttons[4] = ui->pushButton_21;
 
+    //下坡阶段 有五个状态
     downhillbuttons[0] = ui->pushButton_22;
     downhillbuttons[1] = ui->pushButton_23;
     downhillbuttons[2] = ui->pushButton_24;
     downhillbuttons[3] = ui->pushButton_25;
     downhillbuttons[4] = ui->pushButton_26;
 
+    //跳跃阶段  有五个状态
     jumpbuttons[0] = ui->pushButton_27;
     jumpbuttons[1] = ui->pushButton_28;
     jumpbuttons[2] = ui->pushButton_29;
     jumpbuttons[3] = ui->pushButton_30;
     jumpbuttons[4] = ui->pushButton_31;
 
-
-     ui->tabWidget->setCurrentIndex(0);
-
+    //tabWidget是打标签按钮 区分现在处于哪个阶段
+     ui->tabWidget->setCurrentIndex(0);//标注当前处于那个阶段
+     //buttons标注6个阶段
      buttons[0] = uphillbuttons;
      buttons[1] = downhillbuttons;
      buttons[2] = upstairsbuttons;
      buttons[3] = downstairsbuttons;
      buttons[4] = walkbuttons;
      buttons[5] = jumpbuttons;
-     for(int i=0;i<6;++i){
+     for(int i=0;i<6;++i){    //for遍历六个阶段和每个阶段的五个状态;
          for(int j=0;j<5;++j){
-             buttons[i][j]->set_normal();
+             buttons[i][j]->set_normal();//将每个阶段的每个状态恢复默认状态;
          }
      }
-
       walkbuttons[1]->set_action();
 }
 
@@ -136,6 +145,8 @@ void MainWindow::FileError(QString err)
     messageBox.setText(err);
     messageBox.exec();
 }
+
+//启动相应的线程进行工作
 void MainWindow::labelWalk(){
     this->threadLabel->start();
 }
@@ -208,7 +219,6 @@ void MainWindow::TcpDisconnect()
 
 void MainWindow::TcpServerDisconnect()
 {
-
     ui->DisconnectButton->setEnabled(false);
     ui->ConnectButton->setEnabled(true);
     ui->TCPlineEdit->setText("未连接到下位机系统");
@@ -219,8 +229,8 @@ void MainWindow::TcpServerDisconnect()
             buttons[i][j]->set_normal();
         }
     }
-
 }
+
 void MainWindow::online(int label1,int label2, float time)
 {
    if(label1 == -1){
@@ -275,10 +285,10 @@ void MainWindow::online(int label1,int label2, float time)
            buttons[label1][i]->set_normal();
        }
    }
-
 }
 
 
+//调用py模型库
 void MainWindow::callPython(){
 
 //    //指定好Python的库和解释器的位置

@@ -35,11 +35,11 @@ public:
 public:
     void set_begin_end(int,int);
     bool peak_judge(pitch_node*);//计算峰值点
-    bool valley_judge(pitch_node*);
+    bool valley_judge(pitch_node*);//计算谷底值点
     void read_imu_data();//总函数  读文件 求均值 填入pitch_mean 判断 刷新pitch
     void baselineIMU();
     void pitch_mean_appen(int,float);
-    void move_window(); //更新窗，前一半等于上一个的后一半
+    void move_window();//更新窗，前一半等于上一个的后一半
     int peak[10]; //记录变化峰值点
     int peak_count; //记录活动段中有几个峰值点
     int valley[10]; //记录变化谷底

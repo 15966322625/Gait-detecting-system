@@ -7,9 +7,8 @@
 #include "MyThread.h"
 #include "tcpclient.h"
 #include "mypushbutton.h"
-
-
 QT_BEGIN_NAMESPACE
+
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
@@ -49,20 +48,19 @@ private:
     //====tcp=========
     TcpClient *client_socket;
     QFile* ansfile;
-    QTextStream filein;
-    void TcpConnect();
+    QTextStream filein;//输入文件
+    void TcpConnect();//TCP通信连接函数
     void TcpDisconnect();
     void online(int u, int v, float time);
     void TcpServerDisconnect();
-
-    MyPushbutton* jumpbuttons[5];
-    MyPushbutton* walkbuttons[5];
-    MyPushbutton* uphillbuttons[5];
-    MyPushbutton* downhillbuttons[5];
-    MyPushbutton* upstairsbuttons[5];
-    MyPushbutton* downstairsbuttons[5];
-
-    MyPushbutton** buttons[6];
+    //6个动作划分阶段
+    MyPushbutton* jumpbuttons[5];//跳跃 每个阶段包含五个状态
+    MyPushbutton* walkbuttons[5];//行走
+    MyPushbutton* uphillbuttons[5];//上坡
+    MyPushbutton* downhillbuttons[5];//下坡
+    MyPushbutton* upstairsbuttons[5];//上楼梯
+    MyPushbutton* downstairsbuttons[5];//下楼梯
+    MyPushbutton** buttons[6];//l六个阶段
 signals:
     void walkupdownOver();
     void jumpOver();

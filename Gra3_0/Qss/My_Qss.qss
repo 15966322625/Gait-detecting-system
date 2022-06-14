@@ -36,49 +36,49 @@ QGraphicsView#graphics_6
 {
     background-color:rgb(255,255,255);
     color:rgb(6,168,255);
-    border-image:url(:/icon/image/zhan.jpg);
+    border-image:url(:/icon/image/zhan.jpg);//站立
     border-radius:5px;
 }
 QGraphicsView#graphics_2
 {
     background-color:rgb(255,255,255);
     color:rgb(6,168,255);
-    border-image:url(:/icon/image/yubei.jpg);
+    border-image:url(:/icon/image/yubei.jpg);//预备
     border-radius:5px;
 }
 QGraphicsView#graphics_3
 {
     background-color:rgb(255,255,255);
     color:rgb(6,168,255);
-    border-image:url(:/icon/image/qi.jpg);
+    border-image:url(:/icon/image/qi.jpg);//起跳
     border-radius:5px;
 }
 QGraphicsView#graphics_4
 {
     background-color:rgb(255,255,255);
     color:rgb(6,168,255);
-    border-image:url(:/icon/image/kong.jpg);
+    border-image:url(:/icon/image/kong.jpg);//悬空
     border-radius:5px;
 }
 QGraphicsView#graphics_5
 {
     background-color:rgb(255,255,255);
     color:rgb(6,168,255);
-    border-image:url(:/icon/image/luodi.jpg);
+    border-image:url(:/icon/image/luodi.jpg);//落地
     border-radius:5px;
 }
 QGraphicsView#graphics_7
 {
     background-color:rgb(255,255,255);
     color:rgb(6,168,255);
-    border-image:url(:/icon/image/ping.jpg);
+    border-image:url(:/icon/image/ping.jpg);//平地
     border-radius:5px;
 }
 QGraphicsView#graphicswalk_2
 {
     background-color:rgb(255,255,255);
     color:rgb(6,168,255);
-    border-image:url(:/icon/image/walk.png);
+    border-image:url(:/icon/image/walk.png);//行走
     border-radius:5px;
 }
 
@@ -86,14 +86,14 @@ QFrame#frame
 {
     background-color:rgb(255,255,255);
     color:rgb(6,168,255);
-    border-image:url(:/icon/image/walk2.png);
+    border-image:url(:/icon/image/walk2.png);//行走
     border-radius:5px;
 }
 QGraphicsView#graphicsjump_2
 {
     background-color:rgb(255,255,255);
     color:rgb(6,168,255);
-    border-image:url(:/icon/image/jump.png);
+    border-image:url(:/icon/image/jump.png);//跳跃
     border-radius:5px;
 }
 
@@ -101,7 +101,7 @@ QGraphicsView#graphicsupstairs_2
 {
     background-color:rgb(255,255,255);
     color:rgb(6,168,255);
-    border-image:url(:/icon/image/upstairs.png);
+    border-image:url(:/icon/image/upstairs.png);//上楼梯
     border-radius:5px;
 }
 
@@ -109,7 +109,7 @@ QGraphicsView#graphicsdownstairs_2
 {
     background-color:rgb(255,255,255);
     color:rgb(6,168,255);
-    border-image:url(:/icon/image/downstairs.png);
+    border-image:url(:/icon/image/downstairs.png);//下楼梯
     border-radius:5px;
 }
 
@@ -117,7 +117,7 @@ QGraphicsView#graphicsuphill_2
 {
     background-color:rgb(255,255,255);
     color:rgb(6,168,255);
-    border-image:url(:/icon/image/uphill.png);
+    border-image:url(:/icon/image/uphill.png);//上坡
     border-radius:5px;
 }
 
@@ -125,7 +125,7 @@ QGraphicsView#graphicsdownhill_2
 {
     background-color:rgb(255,255,255);
     color:rgb(6,168,255);
-    border-image:url(:/icon/image/downhill.png);
+    border-image:url(:/icon/image/downhill.png);//下坡
     border-radius:5px;
 }
 

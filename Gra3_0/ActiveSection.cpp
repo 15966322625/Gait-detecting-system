@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QtMath>
 
+//检测活动段函数实现
 ActiveSection::ActiveSection(QString sampENpath)
 {
     this->sampEN_path = sampENpath;
@@ -40,7 +41,7 @@ void ActiveSection::open_file_samp()
     out.setDevice(&file_samp);
     out.setCodec("UTF-8");
 }
-//imu
+//打开imu样本数据
 void ActiveSection::open_file_imu_samp()
 {
     imu_sampEN_path = "./Filterdata/imu_sampEN.csv";
@@ -65,6 +66,7 @@ ActiveSection::~ActiveSection()
     file_samp_2.close();
     imu_file_samp.close();
 }
+//追加ADC数据
 void ActiveSection::ADC_append(float* data_adc)
 {
     this->DATA->point = data_adc[0];
@@ -75,11 +77,11 @@ void ActiveSection::ADC_append(float* data_adc)
     DATA->adc_length++;
     DATA->point = data_adc[0];//记录第几行数据
 }
+//追加IMU数据
 void ActiveSection::IMU_append(float IMU_data[8][12])
 {
     for (int _CH = 0; _CH < IMU_CH; _CH++)
     {
-
         DATA->IMU_DATA_CH[_CH].ACC_x[DATA->IMU_length] = IMU_data[_CH][0];
         DATA->IMU_DATA_CH[_CH].ACC_y[DATA->IMU_length] = IMU_data[_CH][1];
         DATA->IMU_DATA_CH[_CH].ACC_z[DATA->IMU_length] = IMU_data[_CH][2];
@@ -221,9 +223,10 @@ bool ActiveSection::check_action_2()
     }
     return false;
 }
+
+//检测IMU数据的活动段
 bool ActiveSection::check_action_IMU()
 {
-
     int count_num = 0;
     for (int i = 0; i < IMU_CH; i++)
     {
@@ -237,7 +240,6 @@ bool ActiveSection::check_action_IMU()
         }
     }
     return false;
-
 }
 
 bool ActiveSection::check_still() //可以由imu和熵同时判断，达到一个条件就离开活动段
@@ -393,7 +395,7 @@ void ActiveSection::imu_check()
     imu_out << (this->DATA->point)-39 << "," << this->imu_SampEn_num << Qt::endl;
 }
 
-
+//初始化所有的文件
 static bool init_file(QFile* IMU, QFile* ADC,QString IMU_path,QString ADC_path)
 {
     IMU->setFileName(IMU_path);
@@ -430,6 +432,7 @@ static void str_to_ADC(QString str,float *data)
         data[i] = temp_list.at(i).toFloat();
     }
 }
+
 //文件记录IMU转到float
 static void str_to_IMU(QString str, float data[8][12])
 {
@@ -532,7 +535,7 @@ int ActiveSectionDetection(ACT_point &ACT_ans,QString path_adc, QString path_imu
                 {
                     ACT_ans.end[ACT_ans.end_count] = point;
                     ACT_ans.end_count++;//到达活动熵结束点
-//                    跳过两次跳跃间隔时间（中间有其他动作）
+                    //跳过两次跳跃间隔时间（中间有其他动作）
                     if(time_gap!=0)
                     {
                         if(!jump_gap(time_gap,adc_in,imu_in))

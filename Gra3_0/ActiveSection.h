@@ -41,14 +41,14 @@ public:
     void imu_check();//imu
     bool status;
     bool ACT_STATUS;
-    float ACC_HIGH;
-    float ACC_LOW;
+    float ACC_HIGH;//新增部分
+    float ACC_LOW;//新增部分
 private:
     ACT_DATA* DATA; //数据包40个adc数据，4个imu数据
-    float SLPW_buf[SLPW_LEN]; //熵的滑动窗
-    float SampEn_num;           //熵
+    float SLPW_buf[SLPW_LEN];//熵的滑动窗
+    float SampEn_num;          //熵
     float imu_SLPW_buf[6]; //熵的滑动窗
-    float imu_SampEn_num;           //熵
+    float imu_SampEn_num;      //熵
     bool flag;                //状态 true：活动段中 false：不在活动段
     bool jump_flag;            //记录跳跃 true检测到跳跃起点
     int begin;              //记录活动段 开始/结束 节点

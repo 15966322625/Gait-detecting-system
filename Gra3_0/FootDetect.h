@@ -5,6 +5,7 @@
  * 根据足底压力找到步态相位关键点
  * 根据运动持续时间和运动间隔时间
 */
+
 #include <vector>
 class FootDetect
 {
@@ -36,12 +37,12 @@ public:
 public:
     std::vector<std::vector<int>> ch1;
     std::vector<std::vector<int>> ch2;
-    std::vector<std::vector<std::vector<int>>> RightHeelToe;
-    std::vector<std::vector<int>> GaitPhase;
-    std::vector<std::vector<int>> GaitPhaseUpStairs;
-    std::vector<std::vector<int>> GaitPhaseDownStairs;
-    std::vector<std::vector<int>> GaitPhaseDownHill;
-    std::vector<std::vector<int>> GaitPhaseUpHill;
+    std::vector<std::vector<std::vector<int>>> RightHeelToe;//右脚跟
+    std::vector<std::vector<int>> GaitPhase;//步态阶段
+    std::vector<std::vector<int>> GaitPhaseUpStairs;//上楼梯阶段
+    std::vector<std::vector<int>> GaitPhaseDownStairs;//下楼梯阶段
+    std::vector<std::vector<int>> GaitPhaseDownHill;//下坡阶段
+    std::vector<std::vector<int>> GaitPhaseUpHill;//上坡阶段
 
 };
 

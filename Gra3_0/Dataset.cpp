@@ -36,7 +36,6 @@ Dataset::Dataset(QString adc_path, QString imu_path,QString EMGfeaturepath,QStri
         QString Gpath = QString(".%1gait%2.csv").arg(gaitpre).arg(i);
 
 
-
         //原始数据
         EMGfea[i].setFileName(Epath);
         if (!EMGfea[i].open(QIODevice::Append))
@@ -215,6 +214,7 @@ int Dataset::file_skip(int point1, int point2)
     }
     return 0;
 }
+//初始化文件
 void Dataset::init_file()
 {
     ADC_in.seek(0);
@@ -290,7 +290,6 @@ void Dataset::write_feature(int gait, int actionlabel){
     //记录IMU
     for (int t = 0; t < ACTD->IMU_length; ++t){
         for(int _ch=0;_ch<6;_ch++){
-
 
             float ax = ACTD->IMU_DATA_CH[_ch].ACC_x[t];
             float ay = ACTD->IMU_DATA_CH[_ch].ACC_y[t];
@@ -447,6 +446,7 @@ void Dataset::write_feature(int gait, int actionlabel){
         IMUouttimescal1_1[gait]<<temp*1.1<<Qt::endl;
     }
 }
+
 int Dataset::datasetcal(std::vector<std::vector<int>>& tag,int actionlabel){
     std::vector<std::vector<std::vector<int>>> tagproc;
     //将不连续的步态运动分割
@@ -562,9 +562,9 @@ int Dataset::datasetcal(std::vector<std::vector<int>>& tag,int actionlabel){
         }
 
     }
-
     return 0;
 }
+
 int Dataset::datasetUpDownHillcal(std::vector<std::vector<int>> &tag, int actionlabel){
     std::vector<std::vector<std::vector<int>>> tagproc;
     //将不连续的步态运动分割

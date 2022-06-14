@@ -18,9 +18,9 @@ public:
     Dataset(QString adc_path, QString imu_path,QString EMGfeaturepath,QString IMUfeaturepath,QString actionLabelpath,QString gaitpath);
     ~Dataset();
     int file_skip(int,int);	//跳转到动作数据开始行
-    void init_file();				//重置文件到开头位置
+    void init_file();	   //重置文件到开头位置
     void clear_ACTD();
-    void write_feature(int label,int action);
+    void write_feature(int label,int action);//写入特征
     void move_forward();			//以步长移动窗
     int datasetcal(std::vector<std::vector<int>>& tag,int action); //制作数据集
     int datasetUpDownHillcal(std::vector<std::vector<int>>& tag,int action); //制作上下坡的数据集，由于上下坡EMG数据和IMU数据有点便宜，所以需要特殊处理
@@ -28,7 +28,7 @@ public:
     ACT_DATA* ACTD;
 
     QFile* ADC;
-    QTextStream ADC_in;
+    QTextStream ADC_in;//输入文本流
     QFile* IMU;
     QTextStream IMU_in;
     QFile* EMGfeature;

@@ -7,11 +7,11 @@
 #include <algorithm>
 #include <iostream>
 
-
 FootDetect::FootDetect()
 {
 
 }
+//寻找空中足底关键点
 int FootDetect::FindAirFootPoint(int ch, std::vector<std::vector<int>> &chn){
     std::vector<std::vector<int>> temp_chn;
     chn.clear();
@@ -78,6 +78,8 @@ int FootDetect::FindAirFootPoint(int ch, std::vector<std::vector<int>> &chn){
     foot_ch.close();
     return 0;
 }
+
+//寻找IMU峰值
 int FootDetect::FindImuPeak(int begin, int end, std::vector<int> nums){
     QFile IMU;
     QString path = QString("./FilterData/filter_IMU.csv");
@@ -122,6 +124,7 @@ int FootDetect::FindImuPeak(int begin, int end, std::vector<int> nums){
     return res;
 }
 
+//寻找IMU谷值
 int FootDetect::FindImuValley(int begin, int end, std::vector<int> nums){
     QFile IMU;
     QString path = QString("./FilterData/filter_IMU.csv");

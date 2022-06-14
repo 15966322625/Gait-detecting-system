@@ -7,8 +7,8 @@
 #include "MyTool.h"
 #include "Configure.h"
 
-
-FilterData::FilterData(QString EMGpath, QString IMUpath,QString FOOTpath)
+//实现对三种数据的总体滤波处理
+FilterData::FilterData(QString EMGpath, QString IMUpath,QString FOOTpath)//参数是三种数据的文件路径
 {
     EMG = new QFile;
     this->EMGpath = EMGpath;
@@ -19,7 +19,6 @@ FilterData::FilterData(QString EMGpath, QString IMUpath,QString FOOTpath)
     FOOT = new QFile;
     this->FOOTpath = FOOTpath;
     FOOT->setFileName(FOOTpath);
-
 }
 FilterData::~FilterData()
 {
@@ -36,7 +35,7 @@ int FilterData::FilterEMGData()
     }
     QTextStream in(EMG);
     QFile adc_after;
-    adc_after.setFileName("./FilterData/filter_ADC.csv");
+    adc_after.setFileName("./FilterData/filter_ADC.csv");//滤波之后的文件名称
     if (!adc_after.open(QIODevice::WriteOnly))
     {
         return -2;
@@ -133,6 +132,8 @@ int FilterData::FilterIMUData()
 
     return 0;
 }
+
+//数据修正
 static int modify2(QString pathori,QString pathtarget){
     QFile foot_afterch;
     foot_afterch.setFileName(pathori);

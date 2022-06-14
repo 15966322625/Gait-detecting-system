@@ -8,7 +8,10 @@
 #include <vector>
 #include "FootDetect.h"
 #include "MyDataStruct.h"
-//============数据滤波===================
+
+//多线程实现数据的循环采集
+
+//============数据滤波线程===================
 class MyThreadFilter : public QThread
 {
     Q_OBJECT
@@ -24,7 +27,7 @@ signals:
     void fileERROR(QString err);
 };
 
-//============自动打标签 walk=====================
+//============自动打标签线程 walk=====================
 class MyThreadLabel : public QThread
 {
     Q_OBJECT
@@ -41,7 +44,7 @@ signals:
     void fileERROR(QString err);
 };
 
-//============自动打标签 上楼梯=====================
+//============自动打标签 上楼梯 线程=====================
 class MyThreadLabelUpstairs : public QThread
 {
     Q_OBJECT
@@ -58,7 +61,7 @@ signals:
     void fileERROR(QString err);
 };
 
-//============自动打标签 下楼梯=====================
+//============自动打标签 下楼梯 线程=====================
 class MyThreadLabelDownstairs : public QThread
 {
     Q_OBJECT
@@ -75,7 +78,7 @@ signals:
     void fileERROR(QString err);
 };
 
-//============批量行走、上楼梯、下楼梯====================
+//============批量行走、上楼梯、下楼梯 线程====================
 class MyThreadALL : public QThread
 {
     Q_OBJECT
@@ -85,7 +88,7 @@ public:
     FootDetect foot;
     std::vector<int> action;
     void SetAction(int);
-    void recordfile(QString path, std::vector<std::vector<int>> &gait,int);
+    void recordfile(QString path, std::vector<std::vector<int>> &gait,int);//二维数据记录步态数据
 protected:
     void run();//重写线程函数
 signals:
@@ -93,7 +96,7 @@ signals:
     void fileERROR(QString err);
 };
 
-//==================检测跳跃==============
+//==================检测跳跃线程==============
 class MyThreadJump : public QThread
 {
     Q_OBJECT
@@ -133,7 +136,7 @@ public:
 
 };
 
-//============自动打标签 上坡=====================
+//============自动打标签 上坡线程=====================
 class MyThreadLabelUpHill : public QThread
 {
     Q_OBJECT

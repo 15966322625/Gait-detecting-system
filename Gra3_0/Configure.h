@@ -1,3 +1,4 @@
+//这里主要是一些配置文件：包括一些宏定义和一些全局变量
 #ifndef CONFIGURE_H
 #define CONFIGURE_H
 #define IMU_CH 7

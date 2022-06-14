@@ -2,8 +2,8 @@
 
 MyPushbutton::MyPushbutton(QWidget *parent) : QPushButton(parent)
 {
-    QString normal = ":/icon/image/white.PNG";
-    QString action = ":/icon/image/red.PNG";
+    QString normal = ":/icon/image/white.PNG";//正常时是白色按钮
+    QString action = ":/icon/image/red.PNG";//有动作时是红色按钮
     //加载图片
     pix_normal.load(normal);
     pix_action.load(action);

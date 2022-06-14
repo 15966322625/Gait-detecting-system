@@ -18,7 +18,6 @@ void ADC_filter(float* ADC_before, float* ADC_filter)
     static float temp_y_50[8][5] = { {0},{0},{0},{0},{0},{0},{0},{0} };
 
 
-
     //20~300带通滤波
     for (int ch = 0; ch < 8; ch++)
     {
