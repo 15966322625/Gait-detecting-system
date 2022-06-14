@@ -14,7 +14,7 @@
 #include "config.h"
 #include "filt_ADC.h"
 
-//**********************************����������***********************//
+//**********************************ADC数据采集进程***********************//
 
 #ifdef ADC_MODE_OL
 ADC_OL *ADC = new ADC_OL;
@@ -32,8 +32,8 @@ static float FLT_Data[8] = { 0 };
 //����״̬־
 static int proc_status = STATUS_ON;
 
-//*************************************  ������  ************************//
-
+//*************************************  数据采集进程  ************************//
+//初始化几个信号
 static void SigH(int Sig)
 {
 	switch (Sig)
@@ -49,7 +49,7 @@ static void SigH(int Sig)
 		break;
 	}
 }
-
+//初始化三个信号
 static void init_sig()
 {
 	signal(SIGINT, SigH);
@@ -57,7 +57,7 @@ static void init_sig()
 	signal(12, SigH);
 }
 
-//��adc���̺�д��glb
+//初始化全局
 static void init_glbs()
 {
 	pid_ADC = getpid();
@@ -80,16 +80,14 @@ static void APP_exit()
 	exit(0);
 }
 
-
-
-
+//进行数据的循环采集 每一次采集都要判断进程是否需要退出 如果需要退出 指向APP_exit函数
 void data_ADC_main()
 {
 	init_sig();
 	init_glbs();
 	//ADC��ʼ����
 #ifdef ADC_MODE_OL
-	ADC->init();
+	ADC->init();//初始化数据采集，主要是为了读取离线文件的数据，打开一个离线文件;
 	printf("ONLINE***********\n");
 #else
 	//ADC_init();

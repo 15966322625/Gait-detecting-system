@@ -5,11 +5,10 @@
 #include "config.h"
 #include "dsp_RCGClass.h"
 #include "BP_DATA.h"
-
 #include <fstream>
 #include <iostream>
 
-
+//==================== 活动段检测类的设计=================================================
 using namespace std;
 #ifdef ANS
 std::ofstream BP_off;
@@ -25,7 +24,7 @@ dsp_RCGClass::~dsp_RCGClass()
 {
 	delete BP;
 }
-//��ʼ�� 初始化
+//初始化
 bool dsp_RCGClass::Init()
 {
 	BP->Init(layer);	//��ʼ��BP������ 初始化BP神经网络
@@ -39,7 +38,7 @@ bool dsp_RCGClass::Init()
 
 	return true;
 }
-//���ݿ���数据拷贝
+//���ݿ���数据拷贝 将IMU和EMG数据保存在活动段检测的共享内存中
 bool dsp_RCGClass::BackUp(SHM_ACT_DATA *pSrc)
 {
 	ACTD.Tnow = pSrc->Tnow;
@@ -69,14 +68,13 @@ bool dsp_RCGClass::BackUp(SHM_ACT_DATA *pSrc)
 			ACTD.IMU_Data_CH[_CH].Q_3[n] = pSrc->IMU_Data_CH[_CH].Q_3[n];
 			ACTD.IMU_Data_CH[_CH].Pitch[n] = pSrc->IMU_Data_CH[_CH].Pitch[n];
 			ACTD.IMU_Data_CH[_CH].Yaw[n] = pSrc->IMU_Data_CH[_CH].Yaw[n];
-
 		}
 	}
 
 
 	return false;
 }
-//	�����ȡ�������� 计算获取特征向量
+//	�����ȡ�������� 计算获取特征向量 基于特征向量进行模式识别
 bool dsp_RCGClass::TZ_calc()
 {
 	VEC.Data[0] = calc_WAV(ACTD.ADC_Data_CH[sEMG_CH_1].Data, ACTD.ADCLen);
@@ -126,18 +124,15 @@ bool dsp_RCGClass::TZ_calc()
 	VEC.Data[38] = calc_Euler(ACTD.IMU_Data_CH[2].Pitch, ACTD.IMULen / 2, 0);
 	VEC.Data[39] = calc_Euler(ACTD.IMU_Data_CH[2].Pitch, ACTD.IMULen - 1, ACTD.IMULen / 2);
 
-
-
 	VEC.VECLen = 40;
 
 	
 	return true;
 }
+//活动段数据处理
 bool dsp_RCGClass::Recg()
 {
 	TZ_calc();
-
-	
 
 	////2.����������������ģʽʶ��
 	BP->BPForward(VEC.Data);

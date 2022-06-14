@@ -1,8 +1,7 @@
 #pragma once
-
+//宏定义
 #define ADC_MODE_OL		//ADC������������
 #define IMU_MODE_OL		//IMU���߲ɼ�
-
 
 
 #define IMU_CH 3

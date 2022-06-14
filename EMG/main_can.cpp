@@ -2,7 +2,6 @@
 *   使用usb转can通信
 */
 
-
 #include "main_can.h"
 #include <iostream>
 #include <signal.h>
@@ -61,6 +60,7 @@ static void init_file()
 }
 
 /******************	�źŴ�������	**********************************************/
+
 static void SigH(int sig)
 {
 	switch (sig)
@@ -81,7 +81,9 @@ static void SigH(int sig)
 	default:
 		break;
 	}
-}/*******************************************/
+}
+
+/*******************************************/
  //	��ʼ���ź�
 static bool init_sig()
 {

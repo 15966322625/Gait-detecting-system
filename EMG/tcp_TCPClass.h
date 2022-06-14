@@ -1,5 +1,5 @@
 /******************************************************
-*			TCP Àà²Ù×÷
+*			TCP ï¿½ï¿½ï¿½ï¿½ï¿½
 *
 *********************************************************/
 #pragma once
@@ -17,7 +17,7 @@
 typedef struct sockaddr sockaddr_t;
 typedef struct sockaddr_in sockaddr_in_t;
 
-typedef struct {		//	TCP Êı¾İ½á¹¹	
+typedef struct {		//	TCP ï¿½ï¿½ï¿½İ½á¹¹	
 	char Data[100];
 } TCP_Data_t;
 
@@ -27,14 +27,14 @@ public:
 	tcp_TCPClass();
 	~tcp_TCPClass();
 public:
-	int init();	//³õÊ¼»¯
-	int send(char *src,int coun);	//·¢ËÍÊı¾İ
-	bool c_flag = false;	//true:	ÒÑ³É¹¦½¨Á¢TCPÁ¬½Ó
+	int init();	//åˆå§‹åŒ–TCPè¿›ç¨‹
+	int send(char *src,int coun);	//å‘é€æ•°æ®
+	bool c_flag = false;	//true:	æˆåŠŸå»ºç«‹TCPè¿æ¥
 private:
-	int socket_fd;	//Éè±¸±êÊ¶·û
+	int socket_fd;	//è®¾å¤‡æ ‡è¯†ç¬¦
 	int TCP_fd;
 	//FILE* print_off;
-	bool s_flag = false;	//true:	½øĞĞTCPÊı¾İ·¢ËÍ
+	bool s_flag = false;	//true:	è¿›è¡ŒTCPæ•°æ®å‘é€
 	sockaddr_in_t server_addr, client_addr;
 };
 

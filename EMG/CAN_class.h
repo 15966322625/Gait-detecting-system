@@ -12,7 +12,7 @@ struct CAN_RES
     long int seconds;
     long int usecond;
 };
-
+//can 通信实现串口通信
 class CAN_class
 {
     public:

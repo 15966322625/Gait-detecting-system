@@ -10,11 +10,10 @@
 #include "shm.h"
 #include "IMU_data.h"
 #include "config.h"
-
+//============================= IMU数据采集进程的设计 ====================================
 
 static pid_t pid_imu;
 
-//״̬־
 static int proc_status = STATUS_ON;
 
 //imu����imu[8][12]
@@ -28,6 +27,8 @@ static void APP_exit()
 }
 
 
+
+//初始化两个信号 SiGINT 和SIGUSR1 主要是为了主进程的退出和本进程的退出;
 void SigH(int Sig)
 {
 	switch (Sig)

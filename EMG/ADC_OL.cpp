@@ -13,7 +13,7 @@
 #include "ADC_OL.h"
 
 
-//	����� ���캯��
+//构造函数和析构函数都是默认的
 ADC_OL::ADC_OL()
 {
 	//	ADCbuf = (unsigned char *)malloc(sizeof(unsigned char)*ADC_CH_NUM * 2);	//����ռ䣬�����洢ADת��֮����ֽ�������
@@ -24,19 +24,19 @@ ADC_OL::~ADC_OL()
 	//	free(ADCbuf);
 	//	free(Data);
 }
-//	ADCģ�鹤����ʼ��
+//	ADC模块的初始化操作
 bool ADC_OL::init()
 {
-	wiringPiSetup();		//��ݮ��IO����ģʽ����
-	setSpiSpeed(ADC_SPICLK);	// ����AD7606��SPI����ͨѶ
-	setGPIO();					//���IO���Ź�������
-	setOS(0);					//����������ģʽ�趨,default:OS2 OS1 OS0 = 000
-	setRange(0);				//�趨���뷶Χģʽ,default:range = -5 ~ +5    1: ��10
-	reset();					//ADC��λ����
+	wiringPiSetup();		//树莓派IO操作模式配置;
+	setSpiSpeed(ADC_SPICLK);	// 配置AD7606的SPI总线通讯;
+	setGPIO();					//相关IO引脚功能配置
+	setOS(0);					//过采样工作模式设定,default:OS2 OS1 OS0 = 000
+	setRange(0);				//设定输入范围模式,default:range = -5 ~ +5    1: ��10
+	reset();					//ADC复位操作
 	setIOtoCVT();
 	return true;
 }
-// �趨SPI����ͨѶ�ٶ�
+// 设置SPI通信的通信速率 通信速率设置为5M 使用库函数进行设置
 void ADC_OL::setSpiSpeed(unsigned int speed = 5000000)
 {
 	int fd;
@@ -46,7 +46,7 @@ void ADC_OL::setSpiSpeed(unsigned int speed = 5000000)
 		exit(EXIT_FAILURE);
 	}
 }
-//	�������GPIO���� 
+//设置GPIO引脚 使用的是库函数 主要是将这些引脚配置为输入输出模式 便于控制AD7606 有些引脚设置为输入 有些设置为输出 有的设置初始状态为高 有的为低
 void ADC_OL::setGPIO()
 {
 	pinMode(RST, OUTPUT);
@@ -67,7 +67,7 @@ void ADC_OL::setGPIO()
 	digitalWrite(OS_1, LOW);
 	digitalWrite(OS_2, LOW);
 }
-//����������ģʽ�趨
+//设置过采样工作模式 由于我们的采样率较低 因此不需要过采样
 void ADC_OL::setOS(uint8_t _ucMode = 0)//default:OS2 OS1 OS0 = 000
 {
 	switch (_ucMode) {			//			����������
@@ -111,7 +111,7 @@ void ADC_OL::setOS(uint8_t _ucMode = 0)//default:OS2 OS1 OS0 = 000
 	}
 }
 
-//�趨���뷶Χģʽ	0:��5V 1:��10V
+//设置输入范围模式  设置为+-5v
 void ADC_OL::setRange(int _ucRange = 0)
 {
 	switch (_ucRange) {
@@ -128,7 +128,7 @@ void ADC_OL::setRange(int _ucRange = 0)
 	}
 }
 
-//ADC���и�λ����
+//ADC复位操作 AD7606是高电平复位 高电平持续50ns 给这个引脚一个上升沿信号
 void ADC_OL::reset()
 {
 	digitalWrite(CS, HIGH);
@@ -140,7 +140,7 @@ void ADC_OL::reset()
 	digitalWrite(RST, LOW);
 }
 
-//����IO���ã�֪ͨADģ�����ADת��
+//设置IO设置 通知AD模块进行AD转换 主要是给CVAB一个上升沿信号
 void ADC_OL::setIOtoCVT()
 {
 	/* Conv in rising edge at least 25ns  */
@@ -150,7 +150,7 @@ void ADC_OL::setIOtoCVT()
 }
 
 
-//	���û�ȡһ֡�µ����ݣ�������һ��ADC����ת��
+//获取数据
 bool ADC_OL::getData(float *pData)
 {
 	int ret;

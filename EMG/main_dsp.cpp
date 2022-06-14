@@ -11,6 +11,8 @@
 #include "shm.h"
 //#include "BP_DATA.h"
 
+
+//=========================================数据处理主进程设计======================================
 //pid
 static pid_t pid_RCG = 0;
 static pid_t pid_dsp = 0;
@@ -24,8 +26,6 @@ static int en_DSP_flag = false;
 static int proc_status = STATUS_ON;
 
 //static FILE* fp_ACT;
-
-
 
 static void APP_exit()
 {
@@ -128,6 +128,7 @@ void main_dsp()
 				Sem_V(semid_glbs);
 				kill(pid_tcp, 10);
 			}
+
 			//�ж��Ƿ���Ҫ����������ȡ��
 			if (ACT->EnAble())
 			{

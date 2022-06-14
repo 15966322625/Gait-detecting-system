@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <string.h>
-
 #include "main_data.h"
 #include "data_ADC_main.h"
 #include "data_IMU_main.h"
@@ -53,24 +52,27 @@ static void APP_exit()
 	exit(0);
 }
 
+
+//注册三个信号
 static void SigH(int Sig)
 {
 	switch (Sig)
 	{
-	case SIGINT:
+	case SIGINT://信号一 ctrl+c产生的信号 主要用于使整个程序退出
 		break;
-	case SIGALRM:
+	case SIGALRM://信号二 在数据采集进程中为了捕获时钟中断 从而控制采集进程的信号
 		ms_T_count += 1;
 		break;
-	case SIGUSR1:
+	case SIGUSR1://信号三 自定义信号 主要为了通知进程某个进程执行
 		break;
 	case SIGUSR2:
-		proc_status = STATUS_OFF;
+		proc_status = STATUS_OFF;//信号四 退出信号
 		break;
 	default:
 		break;
 	}
 }
+
 
 static void T_WIN_SLD()
 {
@@ -89,7 +91,7 @@ static void T_WIN_SLD()
 	Sem_V(semid_timer);
 }
 
-//��װ�ź�
+//初始化四个信号
 static void init_sig()
 {
 	signal(SIGINT, SigH);
@@ -98,7 +100,9 @@ static void init_sig()
 	signal(SIGUSR2, SigH);
 }
 
-//	��ʼ����ʱ��
+//初始化周期时钟
+//初始化一个定时器，这个定时器每隔1ms执行一次判断，将信号发送给数据采集进程，来控制采集速率;
+//然后程序陷入死循环 开始数据采集;
 static bool init_timer()
 {
 	struct itimerval timer_val;
@@ -111,7 +115,8 @@ static bool init_timer()
 	return true;
 }
 
-
+//等待ADC采集进程是否就绪
+//如果ADC进程准备好了 会将共享内存中标志设置为true 
 static void wait_ADC()
 {
 	int flag = false;
@@ -128,7 +133,8 @@ static void wait_ADC()
 	printf(".......ADC.......OK !\n");
 }
 
-
+//等待IMU数据采集进程是否就绪
+//就绪后将其在共享内存中的标志设置为true
 static void wait_IMU()
 {
 	int flag = false;
@@ -441,21 +447,21 @@ static void init_WIN_SLD()
 
 void main_data()
 {
-	init_sig();
-	init_glbs();
-	wait_ADC();
+	init_sig();//初始化信号
+	init_glbs();//初始化全局
+	wait_ADC();//等待ADC
 	wait_IMU();
 	wait_FT();
-	init_OFL();  	//���ɼ������������ߡ�
+	init_OFL();//初始化数据离线保存  	//���ɼ������������ߡ�
 	int Tnow;
 	init_WIN_SLD();
 	
-	init_timer();
+	init_timer();//初始化时钟周期
 	while (true)
 	{	//	�������ݻ������ķ���ѭ��
 		if (proc_status == STATUS_OFF)
 		{
-			APP_exit();
+			APP_exit();//进程退出
 		}
 		Tnow = ms_T_count;
 		//��ʱ��������ÿ��������������һ�Ρ��ڸ�������֮ǰ���м�ʱ��

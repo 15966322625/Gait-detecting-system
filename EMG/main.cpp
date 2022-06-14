@@ -35,6 +35,7 @@ static pid_t pid_rcg;
 static pid_t pid_foot;
 //tcp_flag
 int tcp_flag =0;
+//终止整个程序的执行
 static void APP_exit()
 {
 	Sem_P(semid_glbs);
@@ -47,6 +48,7 @@ static void APP_exit()
 	pid_foot = p_shm_GLB->PID.PID_FOOT;
 	Sem_V(semid_glbs);
 
+    //结束各个进程
 	kill(pid_data, 12);
 	kill(pid_dsp, 12);
 	kill(pid_tcp, 12);
@@ -55,7 +57,7 @@ static void APP_exit()
 	kill(pid_rcg, 12);
 	kill(pid_foot, 12);
 
-
+    //无限期等待进程被杀死
 	waitpid(pid_data, NULL, 0);
 	waitpid(pid_dsp, NULL, 0);
 	waitpid(pid_tcp, NULL, 0);
@@ -76,7 +78,7 @@ static void APP_exit()
 	exit(0);
 }
 
-//	�źŴ���
+//信号	�źŴ���
 static void SigH(int sig)
 {
 	switch (sig) 
@@ -89,13 +91,14 @@ static void SigH(int sig)
 	}
 }
 
-
+//初始化信号 这个信号关联ctrl+c
 static bool init_sig()
 {
 	signal(SIGINT, SigH);
 	return true;
 }
-
+//初始化信号量 semaphore
+//创建了八个信号量完成对各个共享内存区域的限制性访问。
 static void init_sem()
 {
 	semid_glbs = Sem_creat_GLB();
@@ -118,7 +121,8 @@ static void init_sem()
 }
 
 
-//	��ʼ�������ڴ�
+//共享内存的设计（数量应该和信号量的数量一致）
+//这里也是设置了八个共享内存
 static void init_shm()
 {
 	shmid_glbs = Shm_creat_glb(sizeof(GLB));
@@ -126,7 +130,6 @@ static void init_shm()
 	//ӳ�䱾��ָ��
 	shm_tmp = Shm_mat(shmid_glbs);
 	p_shm_GLB = (GLB *)shm_tmp;
-
 
 	//*********************ADC*******************
 	//
@@ -164,7 +167,6 @@ static void init_shm()
 	shm_tmp = Shm_mat(shmid_DATA);
 	p_shm_DATA = (SHM_DATA_t *)shm_tmp;
 
-
 //*********************ACT*******************
 //
 //******************************************
@@ -173,6 +175,7 @@ static void init_shm()
 	//ӳ�䱾��ָ��
 	shm_tmp = Shm_mat(shmid_ACT);
 	p_shm_ACT = (SHM_ACT_DATA *)shm_tmp;
+
 
 //*********************TCP*******************
 //
@@ -194,8 +197,7 @@ static void init_shm()
 	p_shm_TIMER = (SHM_TIMER_t *)shm_tmp;
 
 }
-
-//д��MAIN��PID������������Ϊ0��
+//初始化全局变量
 static void init_glbs()
 {
 	pid_main = getpid();
@@ -219,6 +221,8 @@ static void init_glbs()
 	Sem_V(semid_glbs);
 }
 
+//死循环
+//死循环进程的设计使得主进程每隔1ms判断一次是否接收到SIGINT信号，如果接收到这个信号，信号捕捉函数会将进程状态设置为退出，执行APP_EXIT函数
 static void proc_monitor()
 {
 	while (1)
@@ -230,8 +234,8 @@ static void proc_monitor()
 		}
 	}
 }
-
-
+//初始化子进程创建
+//这段程序创建8个子进程
 static void  init_proc()
 {
 	pid_t pid;
@@ -241,7 +245,7 @@ static void  init_proc()
 	}
 	else if (pid == 0)
 	{
-// DATA ***********
+// 1 DATA *****数据采集主进程******
 		main_data();
 	}
 	else
@@ -253,7 +257,7 @@ static void  init_proc()
 		else if (pid == 0)
 		{
 
-//DSP   *************
+//2 DSP   *****数据处理主进程******** 百度上 DSP是数字信号处理的意思
 			main_dsp();
 		}
 		else
@@ -264,7 +268,7 @@ static void  init_proc()
 			}
 			else if (pid == 0)
 			{
-//TCP   ***************
+//3 TCP   *******TCP通信主进程********
 				if(tcp_flag == 1)
 				{
 					main_can();
@@ -287,7 +291,7 @@ static void  init_proc()
 				}
 				else if (pid == 0)
 				{
-//ADC   *****************
+//4 ADC    ********ADC数据采集子进程*********
 					data_ADC_main();
 				}
 				else
@@ -298,7 +302,7 @@ static void  init_proc()
 					}
 					else if (pid == 0)
 					{
-//IMU   ****************
+//5 IMU    *****IMU数据采集子进程******
 						data_IMU_main();
 					}
 					else
@@ -309,7 +313,7 @@ static void  init_proc()
 						}
 						else if (pid == 0)
 						{
-//RCG  ****************
+//6 RCG   *******活动段数据处理子进程*********
 							dsp_RCG_main();
 						}
 						else
@@ -320,12 +324,12 @@ static void  init_proc()
 							}
 							else if (pid == 0)
 							{
-//FOOT
+//7 FOOT  ********足底压力数据子进程********
 								data_FOOT_main();
 							}
 							else 
 							{
-//MAIN	*****************
+//8 MAIN  *****************
 								proc_monitor();
 							}	
 						}
@@ -344,26 +348,23 @@ int main(int argc, char** argv)
         cout<<"please input your Password and tcp or can"<<endl;
         exit(-1);
     }
-
- // /*  if(strcmp(argv[1],"518chunSheng520") != 0)
- //   {
- //       cout<<"your Password is wrong!!!"<<endl;
- //       exit(-1);
- //   }*/
-
-	if(strcmp(argv[2],"tcp") == 0)
+  /*  if(strcmp(argv[1],"518chunSheng520") != 0)
+    {
+        cout<<"your Password is wrong!!!"<<endl;
+        exit(-1);
+    }*/
+	/*if(strcmp(argv[2],"tcp") == 0)
 	{
 		tcp_flag = 0;
-	}
+	}*/
 	else if(strcmp(argv[2],"can") == 0)
 	{
 		tcp_flag = 1;
 	}
 	else
 	{
-		tcp_flag = 1;
+		tcp_flag = 0;
 	}
-
 
 	init_sig();		//	1.��ʼ���ź���Ӧ
 	init_sem();		//	2.��ʼ���ź���

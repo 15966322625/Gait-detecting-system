@@ -3,17 +3,20 @@
 #include "dsp_ACT.h"
 #include "dsp_RCGClass.h"
 
+///活动段检测类的设计=================================================
 
+//构造函数 如果需要将活动段识别结果离线 则打开一个离线文件 将识别结果写入这个离线文件中
 dsp_ACTClass::dsp_ACTClass()
 {
 	T_status = 0;
 }
 
-dsp_ACTClass::~dsp_ACTClass()
+dsp_ACTClass::~dsp_ACTClass()//主要讲打开的离线文件关闭
 {
 
 }
-//	��ζ˵��� �����ʼ��
+//讲活动段检测类中的一些变量进行初始化
+//主要是初始化计数 初始化活动窗数据缓存 讲数据标志设置为假
 bool dsp_ACTClass::Init(pid_t PID)
 {
 	W_cnt = 0;
@@ -112,7 +115,8 @@ bool dsp_ACTClass::Append(SHM_ACT_DATA * pDest, SHM_ACT_DATA * pSrc)
 
 	return false;
 }
-//�������⣬ֻҪ���в������Ϳ�ʼ��ACT_DATA���������ݡ�
+
+//活动段起点检测
 bool dsp_ACTClass::Status_0()
 {
 	//ACT_STATUS = 0;
@@ -148,7 +152,7 @@ bool dsp_ACTClass::Status_0()
 	return true;
 }
 
-//����յ���
+//活动段终点检测
 bool dsp_ACTClass::Status_1()
 {
 	static int Tcount = 0;
@@ -223,7 +227,7 @@ float dsp_ACTClass::SampEn_Br(float *Data, int m, float r, int N) {
 	tmp = tmp / (N - m + 1);
 	return tmp;
 }
-//	���㻬��������������ֵ
+//样本熵计算
 bool dsp_ACTClass::SampEnCal()
 {
 	float Br, Br_1;
@@ -255,7 +259,7 @@ bool dsp_ACTClass::Check()
 	return false;
 }
 
-//�ж��ǲ��Ǹü�����?	��200����	...�������֮��һ��Ҫ������ݻ���
+//激活 �ж��ǲ��Ǹü�����?	��200����	...�������֮��һ��Ҫ������ݻ���
 bool dsp_ACTClass::EnAble()
 {
 	if ((ACT_DATA.DATLen + ACT_DATA_tmp.DATLen >= ACT_LEN) && (Status == 1)) 
@@ -269,7 +273,7 @@ bool dsp_ACTClass::EnAble()
 	}
 	return false;
 }
-//��μ�⸴λ����,û��⵽һ���������֮����и�λ��׼���ü����һ�����
+//活动段检测复位
 bool dsp_ACTClass::Reset()
 {
 	//W_cnt_S = 0;
@@ -278,7 +282,8 @@ bool dsp_ACTClass::Reset()
 	//Clear();
 	return false;
 }
-//�����µ����ݿ�����ACT��DATW�ĳ�Ա
+
+//数据包备份到DATW
 bool dsp_ACTClass::CpyD2A(SHM_DATA_t *pSrc)
 {
 	W_cnt += 1;
@@ -311,7 +316,9 @@ bool dsp_ACTClass::CpyD2A(SHM_DATA_t *pSrc)
 	}
 	return true;
 }
-//��DATW�����ݿ�����Ŀ�������
+
+//将数据段保存到活动段检测的窗口内
+//设计两个缓存：一级缓存和二级缓存 一级缓存主要是讲数据保存下来 二级缓存主要是讲数据保存在活动段中 进行活动段的检测;
 bool dsp_ACTClass::CpyA2A(SHM_ACT_DATA *pDest)
 {
 	pDest->Tnow = ACT_DATA.Tnow;

@@ -1,10 +1,10 @@
-/************************************************************
-*			ADC²ÉÑùµ×²ã¿ØÖÆ
-***************************************************************/
+//************************************************************
+//			ADCé‡‡é›†ç±»çš„è®¾è®¡ è¿™ä¸ªç±»ä¸»è¦æ§åˆ¶ADèŠ¯ç‰‡çš„ä½¿ç”¨
+//***************************************************************
 #pragma once
 #include <stdint.h>
 
-#define RST 			0		//IOÒı½Å¶¨Òå
+#define RST 			0		//IOï¿½ï¿½ï¿½Å¶ï¿½ï¿½ï¿½
 #define CVAB 			2
 #define CS 				3
 #define BUSY  			4
@@ -14,7 +14,7 @@
 #define OS_0			22
 #define OS_1			23
 #define OS_2			24
-#define ADC_SPICLK 		5000000		// SPI×ÜÏßÍ¨Ñ¶ËÙÂÊ
+#define ADC_SPICLK 		5000000		// SPIï¿½ï¿½ï¿½ï¿½Í¨Ñ¶ï¿½ï¿½ï¿½ï¿½
 #define SPI_MODE_0		0u   //CPOL = 0, CPHA = 0, Clock idle low, data is clocked in on rising edge, output data (change) on falling edge
 #define SPI_MODE_1		1u   //CPOL = 0, CPHA = 1, Clock idle low, data is clocked in on falling edge, output data (change) on rising edge
 #define SPI_MODE_2		2u   //CPOL = 1, CPHA = 0, Clock idle high, data is clocked in on falling edge, output data (change) on rising edge
@@ -32,21 +32,24 @@ public:
 	ADC_OL();
 	~ADC_OL();
 public:
-	bool init();	//³õÊ¼»¯²Ù×÷£¬Ö¸¶¨µ±Ç°ÓĞport_num¸öÍ¨µÀÀ´½øĞĞAD²ÉÑù
-	bool getData(float *pData);	//»ñÈ¡Êı¾İ
+	bool init();	//ADCæ¨¡å—çš„åˆå§‹åŒ–æ“ä½œ æŒ‡å®šå½“å‰æœ‰port_numä¸ªé€šé“æ¥è¿›è¡ŒADé‡‡æ ·;
+	bool getData(float *pData);	//è·å–æ•°æ®
 //public:
 //	float Data[8];
 private:
-	void setSpiSpeed(unsigned int speed);	//SPI×ÜÏß³õÊ¼»¯²Ù×÷
-	void setGPIO();				//Ïà¹ØIOÒı½Å¹¦ÄÜÅäÖÃ
-	void setOS(uint8_t _ucMode);	//¹ı²ÉÑù¹¤×÷Ä£Ê½Éè¶¨
-	void setRange(int _ucRange);	//Éè¶¨ÊäÈë·¶Î§Ä£Ê½
-	void reset();				//ADC¸´Î»²Ù×÷
-	void setIOtoCVT();			//½øĞĞIOÉèÖÃ£¬Í¨ÖªADÄ£¿é½øĞĞAD×ª»»
-	float compute(unsigned char HH, unsigned char LL);	//½øĞĞAD²ÉÑùºó½á¹û¼ÆËã£¬»ñµÃAD²ÉÑùµÄµçÑ¹Öµ
-	bool ofset(float *pData);	//ÎªÔ­Ê¼Êı¾İÌí¼ÓÆ«ÖÃ
+	void setSpiSpeed(unsigned int speed);	//SPIæ€»çº¿åˆå§‹åŒ–æ“ä½œ
+	void setGPIO();				//ç›¸å…³IOå¼•è„šåŠŸèƒ½é…ç½®
+	void setOS(uint8_t _ucMode);	//è¿‡é‡‡æ ·å·¥ä½œæ¨¡å¼è®¾å®š
+	void setRange(int _ucRange);	//è®¾å®šè¾“å…¥èŒƒå›´æ¨¡å¼
+	void reset();				//ADCå¤ä½æ“ä½œ
+	void setIOtoCVT();			//è¿›è¡ŒIOè®¾ç½® é€šçŸ¥ADæ¨¡å—è¿›è¡ŒADè½¬æ¢
+	float compute(unsigned char HH, unsigned char LL);	//è¿›è¡ŒADé‡‡æ ·åç»“æœè®¡ç®— è·å¾—ADé‡‡æ ·çš„ç”µå‹å€¼
+	bool ofset(float *pData);	//ä¸ºåŸå§‹æ•°æ®æ·»åŠ é…ç½®
 private:
 	int MAXRange = 5;
 	unsigned char ADCbuf[16];
 };
+
+
+
 

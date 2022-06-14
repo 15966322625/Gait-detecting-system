@@ -54,7 +54,6 @@ void BP_DATA()
 	// 	exit(0);
 	// }
 
-
 	layer[0] = 40;
 	layer[1] = 30;
 	layer[2] = 15;
@@ -70,8 +69,6 @@ void BP_DATA()
 
 	weights_in.close();
 	printf("read BP data ok!!!");
-
-
 }
 
 
@@ -118,7 +115,6 @@ static void read_dense_weights_bias(std::ifstream &in,Dense_layer* dense)
 }
 
 
-
 static void BN_read_weights(std::ifstream& in, Batch_Norm* BN)
 {
 	using namespace std;
@@ -138,6 +134,7 @@ static void BN_read_weights(std::ifstream& in, Batch_Norm* BN)
 		}
 		buff.clear();
 	}
+	
 	//读取var
 	if(getline(in,buff))
 	{
